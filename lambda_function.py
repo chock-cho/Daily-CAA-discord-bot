@@ -41,7 +41,7 @@ def generate_fortunes():
     prompt = (
         "넌 하루에 한 번 사람들에게 귀여운 운세를 전해주는 고양이 '복냥이'야. "
         "업무/공부운, 연애운, 건강운, 금전운 네 가지 카테고리별로 각각 한국어 한 문장 운세를 만들어줘. "
-        "각 운세는 귀엽고 긍정적이며, 사람들에게 희망을 불어줄 수 있는 말을 해주어야 해. " 
+        "각 운세는 귀엽고 긍정적이며, 사람들에게 희망을 불어줄 수 있는 말을 해주어야 해. "
         "또한 각 카테고리마다 '행운의 아이템'도 하나 정해서 알려줘. "
         "형식은 아래와 같아야 해:\n\n"
         "{\n"
@@ -51,20 +51,21 @@ def generate_fortunes():
         '  "금전운": {"fortune": "운세 텍스트", "lucky_item": "행운 아이템"}\n'
         "}"
     )
-    response = client.chat.completions.create(
-        model="gpt-4",
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0.7,
-        max_tokens=300
-    )
-
-    reply = response.choices[0].message.content.strip()
 
     try:
-        parsed = json.loads(reply)
+        response = client.chat.completions.create(
+            model="gpt-4",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.7,
+            max_tokens=300
+        )
+        reply = response.choices[0].message.content.strip()
+        print("GPT 응답:", reply)
 
+        parsed = json.loads(reply)
         base_score = random.randint(65, 85)
-        for category in parsed:
+
+        for category in ["업무운", "연애운", "건강운", "금전운"]:
             score = base_score + random.randint(-10, 10)
             parsed[category]["score"] = max(50, min(100, score))
 
@@ -72,11 +73,12 @@ def generate_fortunes():
 
     except Exception as e:
         print("GPT 응답 파싱 실패:", e)
+        base_score = random.randint(65, 85)
         return {
-            "업무운": {"fortune": "집중력이 높아진 하루! 업무가 착착 진행될 거예요, 냐옹~ 🐱", "lucky_item": "노란 볼펜", "score": random.randint(60, 85)},
-            "연애운": {"fortune": "우연한 마주침이 두근두근 인연이 될지도 몰라요, 냐옹~ 🐱", "lucky_item": "포근한 스웨터", "score": random.randint(60, 85)},
-            "건강운": {"fortune": "가벼운 스트레칭이 건강을 지켜줄 거예요, 냐옹~ 🐱", "lucky_item": "요가 매트", "score": random.randint(60, 85)},
-            "금전운": {"fortune": "작은 절약이 큰 기쁨으로 돌아올 거예요, 냐옹~ 🐱", "lucky_item": "동전 지갑", "score": random.randint(60, 85)},
+            "업무운": {"fortune": "집중력이 높아진 하루! 업무가 착착 진행될 거예요, 냐옹~ 🐱", "lucky_item": "노란 볼펜", "score": max(50, base_score + random.randint(-10, 10))},
+            "연애운": {"fortune": "우연한 마주침이 두근두근 인연이 될지도 몰라요, 냐옹~ 🐱", "lucky_item": "포근한 스웨터", "score": max(50, base_score + random.randint(-10, 10))},
+            "건강운": {"fortune": "가벼운 스트레칭이 건강을 지켜줄 거예요, 냐옹~ 🐱", "lucky_item": "요가 매트", "score": max(50, base_score + random.randint(-10, 10))},
+            "금전운": {"fortune": "작은 절약이 큰 기쁨으로 돌아올 거예요, 냐옹~ 🐱", "lucky_item": "동전 지갑", "score": max(50, base_score + random.randint(-10, 10))},
         }
 
 def get_korean_date():
