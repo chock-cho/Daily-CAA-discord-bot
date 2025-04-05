@@ -65,20 +65,42 @@ def generate_fortunes():
         parsed = json.loads(reply)
         base_score = random.randint(65, 85)
 
-        for category in ["업무운", "연애운", "건강운", "금전운"]:
-            score = base_score + random.randint(-10, 10)
-            parsed[category]["score"] = max(50, min(100, score))
+        fallback = {
+            "업무운": {"fortune": "업무가 착착 진행될 거예요, 냐옹~ 🐱", "lucky_item": "노란 볼펜"},
+            "연애운": {"fortune": "마음이 통하는 순간이 올 거예요, 냐옹~ 🐱", "lucky_item": "편지"},
+            "건강운": {"fortune": "스트레칭이 복이 되는 하루예요, 냐옹~ 🐱", "lucky_item": "요가 매트"},
+            "금전운": {"fortune": "작은 소비가 기쁨이 될 거예요, 냐옹~ 🐱", "lucky_item": "동전 지갑"},
+        }
 
-        return parsed
+        result = {}
+
+        for category in ["업무운", "연애운", "건강운", "금전운"]:
+            score = max(50, min(100, base_score + random.randint(-10, 10)))
+            if category in parsed:
+                result[category] = {
+                    "fortune": parsed[category].get("fortune", fallback[category]["fortune"]),
+                    "lucky_item": parsed[category].get("lucky_item", fallback[category]["lucky_item"]),
+                    "score": score
+                }
+            else:
+                result[category] = {
+                    "fortune": fallback[category]["fortune"],
+                    "lucky_item": fallback[category]["lucky_item"],
+                    "score": score
+                }
+
+        return result
 
     except Exception as e:
         print("GPT 응답 파싱 실패:", e)
         base_score = random.randint(65, 85)
         return {
-            "업무운": {"fortune": "집중력이 높아진 하루! 업무가 착착 진행될 거예요, 냐옹~ 🐱", "lucky_item": "노란 볼펜", "score": max(50, base_score + random.randint(-10, 10))},
-            "연애운": {"fortune": "우연한 마주침이 두근두근 인연이 될지도 몰라요, 냐옹~ 🐱", "lucky_item": "포근한 스웨터", "score": max(50, base_score + random.randint(-10, 10))},
-            "건강운": {"fortune": "가벼운 스트레칭이 건강을 지켜줄 거예요, 냐옹~ 🐱", "lucky_item": "요가 매트", "score": max(50, base_score + random.randint(-10, 10))},
-            "금전운": {"fortune": "작은 절약이 큰 기쁨으로 돌아올 거예요, 냐옹~ 🐱", "lucky_item": "동전 지갑", "score": max(50, base_score + random.randint(-10, 10))},
+            category: {
+                "fortune": fallback[category]["fortune"],
+                "lucky_item": fallback[category]["lucky_item"],
+                "score": max(50, min(100, base_score + random.randint(-10, 10)))
+            }
+            for category in ["업무운", "연애운", "건강운", "금전운"]
         }
 
 def get_korean_date():
