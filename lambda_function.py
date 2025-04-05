@@ -73,33 +73,41 @@ def generate_fortunes():
         }
 
         result = {}
-
         for category in ["업무운", "연애운", "건강운", "금전운"]:
-            score = max(50, min(100, base_score + random.randint(-10, 10)))
-            if category in parsed and isinstance(parsed[category], dict):
+            item = parsed.get(category)
+            if isinstance(item, dict) and "fortune" in item and "lucky_item" in item:
                 result[category] = {
-                    "fortune": parsed[category].get("fortune", fallback[category]["fortune"]),
-                    "lucky_item": parsed[category].get("lucky_item", fallback[category]["lucky_item"]),
-                    "score": score
+                    "fortune": item["fortune"],
+                    "lucky_item": item["lucky_item"]
                 }
             else:
                 result[category] = {
                     "fortune": fallback[category]["fortune"],
-                    "lucky_item": fallback[category]["lucky_item"],
-                    "score": score
+                    "lucky_item": fallback[category]["lucky_item"]
                 }
+
+        # 점수는 마지막에 따로 부여
+        for category in result:
+            result[category]["score"] = max(50, min(100, base_score + random.randint(-10, 10)))
+
         return result
 
     except Exception as e:
         print("GPT 응답 파싱 실패:", e)
         base_score = random.randint(65, 85)
+        fallback = {
+            "업무운": {"fortune": "업무가 착착 진행될 거예요, 냐옹~ 🐱", "lucky_item": "노란 볼펜"},
+            "연애운": {"fortune": "마음이 통하는 순간이 올 거예요, 냐옹~ 🐱", "lucky_item": "편지"},
+            "건강운": {"fortune": "스트레칭이 복이 되는 하루예요, 냐옹~ 🐱", "lucky_item": "요가 매트"},
+            "금전운": {"fortune": "작은 소비가 기쁨이 될 거예요, 냐옹~ 🐱", "lucky_item": "동전 지갑"},
+        }
         return {
             category: {
                 "fortune": fallback[category]["fortune"],
                 "lucky_item": fallback[category]["lucky_item"],
                 "score": max(50, min(100, base_score + random.randint(-10, 10)))
             }
-            for category in ["업무운", "연애운", "건강운", "금전운"]
+            for category in fallback
         }
 
 def get_korean_date():
