@@ -1,0 +1,69 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+*.env
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# VSCode settings
+.vscode/
+
+# macOS system files
+.DS_Store
+
+# Logs
+*.log
+
+# Python cache
+*.pytest_cache/
+.pytest_cache/
+.cache/
+
+# Test coverage reports
+htmlcov/
+.coverage
+coverage.xml
+*.cover
+*.py,cover
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# pyre
+.pyre/
+
+# local environment secrets
+.env
+.env.*
+
+# OpenAI, API keys, tokens (common naming patterns)
+*openai_key*
+*api_key*
+*secret*
+*token*
+*credentials*
+
+# AWS credentials
+*.pem
+*.aws/
+
+# Docker
+*.pid
+docker-compose.override.yml
+
+# Ignore any SQLite databases
+*.sqlite3
+
+# Ignore compiled Cython files
+*.c
+*.so
