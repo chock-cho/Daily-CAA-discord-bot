@@ -76,7 +76,7 @@ def generate_fortunes():
 
         for category in ["업무운", "연애운", "건강운", "금전운"]:
             score = max(50, min(100, base_score + random.randint(-10, 10)))
-            if category in parsed:
+            if category in parsed and isinstance(parsed[category], dict):
                 result[category] = {
                     "fortune": parsed[category].get("fortune", fallback[category]["fortune"]),
                     "lucky_item": parsed[category].get("lucky_item", fallback[category]["lucky_item"]),
@@ -88,7 +88,6 @@ def generate_fortunes():
                     "lucky_item": fallback[category]["lucky_item"],
                     "score": score
                 }
-
         return result
 
     except Exception as e:
