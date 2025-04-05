@@ -63,9 +63,10 @@ def generate_fortunes():
     try:
         parsed = json.loads(reply)
 
-        base_score = random.randint(60, 85)
+        base_score = random.randint(65, 85)
         for category in parsed:
-            parsed[category]["score"] = min(100, max(0, base_score + random.randint(-10, 10)))
+            score = base_score + random.randint(-10, 10)
+            parsed[category]["score"] = max(50, min(100, score))
 
         return parsed
 
