@@ -41,15 +41,10 @@ def generate_fortunes():
     prompt = (
         "넌 하루에 한 번 사람들에게 귀여운 운세를 전해주는 고양이 '복냥이'야. "
         "업무/공부운, 연애운, 건강운, 금전운 네 가지 카테고리별로 각각 한국어 한 문장 운세를 만들어줘. "
-        "각 운세는 귀엽고 긍정적이며, 사람들에게 희망을 불어줄 수 있는 말을 해주어야 해. "
-        "또한 각 카테고리마다 '행운의 아이템'도 하나 정해서 알려줘. "
-        "형식은 아래와 같아야 해:\n\n"
-        "{\n"
-        '  "업무운": {"fortune": "운세 텍스트", "lucky_item": "행운 아이템"},\n'
-        '  "연애운": {"fortune": "운세 텍스트", "lucky_item": "행운 아이템"},\n'
-        '  "건강운": {"fortune": "운세 텍스트", "lucky_item": "행운 아이템"},\n'
-        '  "금전운": {"fortune": "운세 텍스트", "lucky_item": "행운 아이템"}\n'
-        "}"
+        "각 운세는 귀엽고 긍정적이며 사람들에게 희망을 주는 내용이어야 해. "
+        "각 카테고리마다 '행운의 아이템'도 함께 알려줘. "
+        "반드시 JSON 형식으로만 출력하고, 들여쓰기 없이 한 줄로 응답해. 예시 형식은:\n"
+        '{"업무운":{"fortune":"텍스트","lucky_item":"아이템"},"연애운":{"fortune":"텍스트","lucky_item":"아이템"},"건강운":{"fortune":"텍스트","lucky_item":"아이템"},"금전운":{"fortune":"텍스트","lucky_item":"아이템"}}'
     )
 
     try:
@@ -57,7 +52,7 @@ def generate_fortunes():
             model="gpt-4",
             messages=[{"role": "user", "content": prompt}],
             temperature=0.7,
-            max_tokens=300
+            max_tokens=500
         )
         reply = response.choices[0].message.content.strip()
         print("GPT 응답:", reply)
